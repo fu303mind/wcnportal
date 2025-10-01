@@ -1,0 +1,39 @@
+﻿version: '3.9'
+services:
+  mongo:
+    image: mongo:6.0
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: portal
+      MONGO_INITDB_ROOT_PASSWORD: portal
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - '27017:27017'
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    env_file:
+      - backend/.env.example
+    environment:
+      MONGO_URI: mongodb://portal:portal@mongo:27017/client-portal?authSource=admin
+      FRONTEND_URL: http://localhost:5173
+      NODE_ENV: production
+    depends_on:
+      - mongo
+    ports:
+      - '5000:5000'
+
+  web:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    depends_on:
+      - api
+    ports:
+      - '5173:80'
+
+volumes:
+  mongo-data:
