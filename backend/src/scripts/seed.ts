@@ -18,32 +18,30 @@ const run = async () => {
       { upsert: true, new: true }
     );
 
-    await User.findOneAndUpdate(
-      { email: 'admin@portal.com' },
-      {
-        email: 'admin@portal.com',
-        password: 'ChangeMeNow!123',
-        firstName: 'Portal',
-        lastName: 'Admin',
-        role: 'admin',
-        isEmailVerified: true
-      },
-      { upsert: true, new: true, setDefaultsOnInsert: true }
-    );
+    // Delete existing users to ensure clean seed
+    await User.deleteOne({ email: 'admin@portal.com' });
+    await User.deleteOne({ email: 'client@portal.com' });
 
-    await User.findOneAndUpdate(
-      { email: 'client@portal.com' },
-      {
-        email: 'client@portal.com',
-        password: 'ChangeMeNow!123',
-        firstName: 'Demo',
-        lastName: 'Client',
-        role: 'client',
-        clientAccount: client._id,
-        isEmailVerified: true
-      },
-      { upsert: true, new: true, setDefaultsOnInsert: true }
-    );
+    // Create admin user (will trigger password hashing)
+    await User.create({
+      email: 'admin@portal.com',
+      password: 'ChangeMeNow!123',
+      firstName: 'Portal',
+      lastName: 'Admin',
+      role: 'admin',
+      isEmailVerified: true
+    });
+
+    // Create client user (will trigger password hashing)
+    await User.create({
+      email: 'client@portal.com',
+      password: 'ChangeMeNow!123',
+      firstName: 'Demo',
+      lastName: 'Client',
+      role: 'client',
+      clientAccount: client._id,
+      isEmailVerified: true
+    });
 
     logger.info('Database seeded successfully');
   } catch (error) {

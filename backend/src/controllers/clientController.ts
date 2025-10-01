@@ -5,7 +5,7 @@ import { slugify } from '@/utils/slugify';
 
 export const listClientsController = async (_req: Request, res: Response) => {
   const clients = await ClientAccount.find().sort({ createdAt: -1 });
-  res.status(StatusCodes.OK).json({ clients });
+  return res.status(StatusCodes.OK).json({ clients });
 };
 
 export const createClientController = async (req: Request, res: Response) => {
@@ -17,7 +17,7 @@ export const createClientController = async (req: Request, res: Response) => {
     slug: slugify(`${name}-${Date.now()}`),
     primaryContactEmail: req.body.primaryContactEmail
   });
-  res.status(StatusCodes.CREATED).json({ client });
+  return res.status(StatusCodes.CREATED).json({ client });
 };
 
 export const updateClientController = async (req: Request, res: Response) => {
@@ -26,5 +26,5 @@ export const updateClientController = async (req: Request, res: Response) => {
   if (!client) {
     return res.status(StatusCodes.NOT_FOUND).json({ message: 'Client not found' });
   }
-  res.status(StatusCodes.OK).json({ client });
+  return res.status(StatusCodes.OK).json({ client });
 };

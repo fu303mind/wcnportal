@@ -10,5 +10,5 @@ export const handleValidation = (req: Request, res: Response, next: NextFunction
       errors: errors.array()
     });
   }
-  next();
+  return next();
 };

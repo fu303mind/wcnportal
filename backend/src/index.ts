@@ -6,7 +6,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
-import csrf from 'csurf';
+// import csrf from 'csurf';
 import mongoSanitize from 'express-mongo-sanitize';
 import hpp from 'hpp';
 import xssClean from 'xss-clean';
@@ -65,7 +65,7 @@ io.on('connection', (socket) => {
   });
 });
 
-const csrfProtection = csrf({ cookie: { httpOnly: true, sameSite: 'lax', secure: env.NODE_ENV === 'production' } });
+// const csrfProtection = csrf({ cookie: { httpOnly: true, sameSite: 'lax', secure: env.NODE_ENV === 'production' } });
 
 app.set('trust proxy', 1);
 
@@ -98,16 +98,16 @@ app.get('/api/health', (_req, res) => {
   });
 });
 
-app.use(csrfProtection);
+// app.use(csrfProtection);
 
-app.get('/api/csrf-token', (req, res) => {
-  const token = req.csrfToken();
-  res.cookie('XSRF-TOKEN', token, {
-    sameSite: 'lax',
-    secure: env.NODE_ENV === 'production'
-  });
-  res.status(StatusCodes.OK).json({ csrfToken: token });
-});
+// app.get('/api/csrf-token', (req, res) => {
+//   const token = req.csrfToken();
+//   res.cookie('XSRF-TOKEN', token, {
+//     sameSite: 'lax',
+//     secure: env.NODE_ENV === 'production'
+//   });
+//   res.status(StatusCodes.OK).json({ csrfToken: token });
+// });
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);

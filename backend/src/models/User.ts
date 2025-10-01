@@ -60,7 +60,6 @@ const userSchema = new mongoose.Schema<UserDocument, UserModel>(
     password: {
       type: String,
       required: true,
-      minlength: 60,
       select: false
     },
     firstName: { type: String, required: true },

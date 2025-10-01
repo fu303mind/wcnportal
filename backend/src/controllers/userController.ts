@@ -8,7 +8,7 @@ export const getCurrentUser = async (req: Request, res: Response) => {
   }
 
   const user = await getUserById(req.user.id);
-  res.status(StatusCodes.OK).json({ user });
+  return res.status(StatusCodes.OK).json({ user });
 };
 
 export const updateCurrentUser = async (req: Request, res: Response) => {
@@ -17,7 +17,7 @@ export const updateCurrentUser = async (req: Request, res: Response) => {
   }
 
   const updated = await updateProfile(req.user.id, req.body);
-  res.status(StatusCodes.OK).json({ user: updated });
+  return res.status(StatusCodes.OK).json({ user: updated });
 };
 
 export const changeCurrentPassword = async (req: Request, res: Response) => {
@@ -27,7 +27,7 @@ export const changeCurrentPassword = async (req: Request, res: Response) => {
 
   const { currentPassword, newPassword } = req.body;
   await changePassword(req.user.id, currentPassword, newPassword);
-  res.status(StatusCodes.NO_CONTENT).send();
+  return res.status(StatusCodes.NO_CONTENT).send();
 };
 
 export const adminListUsers = async (req: Request, res: Response) => {
@@ -38,12 +38,12 @@ export const adminListUsers = async (req: Request, res: Response) => {
     search: search as string | undefined,
     role: role as any
   });
-  res.status(StatusCodes.OK).json(result);
+  return res.status(StatusCodes.OK).json(result);
 };
 
 export const adminUpdateUserRole = async (req: Request, res: Response) => {
   const { userId } = req.params;
   const { role } = req.body;
   const user = await updateUserRole(userId, role);
-  res.status(StatusCodes.OK).json({ user });
+  return res.status(StatusCodes.OK).json({ user });
 };

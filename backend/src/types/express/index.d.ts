@@ -9,7 +9,7 @@ declare global {
         email: string;
         mfaVerified?: boolean;
       };
-      csrfToken?: string;
+      csrfToken?: () => string;
     }
   }
 }

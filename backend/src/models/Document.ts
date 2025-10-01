@@ -10,6 +10,7 @@ export interface StoredDocument extends MongooseDocument {
   clientAccount?: mongoose.Types.ObjectId;
   storagePath: string;
   checksum: string;
+  metadata?: Map<string, any>;
   createdAt: Date;
 }
 

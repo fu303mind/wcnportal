@@ -111,7 +111,13 @@ export const verifyEmail = async (token: string) => {
     throw error;
   }
 
-  const user = storedToken.user as UserDocument;
+  if (!storedToken.user || typeof storedToken.user === 'string' || !('email' in storedToken.user)) {
+    const error: any = new Error('User not found');
+    error.statusCode = StatusCodes.NOT_FOUND;
+    throw error;
+  }
+
+  const user = storedToken.user as unknown as UserDocument;
   user.isEmailVerified = true;
   await user.save();
 

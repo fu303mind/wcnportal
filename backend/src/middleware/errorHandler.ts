@@ -48,9 +48,17 @@ export const errorHandler: ErrorRequestHandler = (err: ApiError, req, res, _next
     });
   }
 
-  return res.status(statusCode).json({
-    message: err.message || 'Internal server error',
-    ...(err.details && { details: err.details }),
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
-  });
+  const response: any = {
+    message: err.message || 'Internal server error'
+  };
+  
+  if ((err as any).details) {
+    response.details = (err as any).details;
+  }
+  
+  if (process.env.NODE_ENV === 'development') {
+    response.stack = err.stack;
+  }
+  
+  return res.status(statusCode).json(response);
 };

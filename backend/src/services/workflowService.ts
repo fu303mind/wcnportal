@@ -199,7 +199,7 @@ export const updateTaskStatus = async (
     throw error;
   }
 
-  const task = workflow.tasks.id(taskId);
+  const task = (workflow.tasks as any).id(taskId);
   if (!task) {
     const error: any = new Error('Task not found');
     error.statusCode = StatusCodes.NOT_FOUND;
@@ -241,7 +241,7 @@ export const addTaskComment = async (workflowId: string, taskId: string, userId:
     throw error;
   }
 
-  const task = workflow.tasks.id(taskId);
+  const task = (workflow.tasks as any).id(taskId);
   if (!task) {
     const error: any = new Error('Task not found');
     error.statusCode = StatusCodes.NOT_FOUND;

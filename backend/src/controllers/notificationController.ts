@@ -12,7 +12,7 @@ export const listNotificationsController = async (req: Request, res: Response) =
     .sort({ createdAt: -1 })
     .limit(50);
 
-  res.status(StatusCodes.OK).json({ notifications });
+  return res.status(StatusCodes.OK).json({ notifications });
 };
 
 export const markNotificationsController = async (req: Request, res: Response) => {
@@ -20,5 +20,5 @@ export const markNotificationsController = async (req: Request, res: Response) =
     return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Unauthorized' });
   }
   await markNotificationsRead(req.user.id, req.body.ids);
-  res.status(StatusCodes.NO_CONTENT).send();
+  return res.status(StatusCodes.NO_CONTENT).send();
 };

@@ -1,4 +1,4 @@
-﻿import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
+﻿import axios, { AxiosError, AxiosInstance } from 'axios';
 
 type TokenPair = {
   accessToken: string | null;
@@ -19,36 +19,39 @@ let initialized = false;
 let authHandlers: AuthHandlers | null = null;
 
 const api: AxiosInstance = axios.create({
-  baseURL: '/api',
+  baseURL: 'http://localhost:5001/api',
   withCredentials: true,
   timeout: 15000
 });
 
 const fetchCsrfToken = async () => {
-  const response = await axios.get<{ csrfToken: string }>('/api/csrf-token', { withCredentials: true });
-  csrfToken = response.data.csrfToken;
+  // CSRF token temporarily disabled
+  // const response = await axios.get<{ csrfToken: string }>('http://localhost:5001/api/csrf-token', { withCredentials: true });
+  // csrfToken = response.data.csrfToken;
   return csrfToken;
 };
 
 const ensureCsrfToken = async () => {
-  if (!csrfToken) {
-    await fetchCsrfToken();
-  }
+  // CSRF token temporarily disabled
+  // if (!csrfToken) {
+  //   await fetchCsrfToken();
+  // }
   return csrfToken;
 };
 
-api.interceptors.request.use(async (config: AxiosRequestConfig) => {
+api.interceptors.request.use(async (config) => {
   if (!config.headers) {
-    config.headers = {};
+    config.headers = {} as any;
   }
 
-  const method = (config.method || 'get').toLowerCase();
-  if (methodsRequiringCsrf.has(method)) {
-    const token = await ensureCsrfToken();
-    if (token) {
-      config.headers[CSRF_HEADER] = token;
-    }
-  }
+  // CSRF token temporarily disabled
+  // const method = (config.method || 'get').toLowerCase();
+  // if (methodsRequiringCsrf.has(method)) {
+  //   const token = await ensureCsrfToken();
+  //   if (token) {
+  //     config.headers[CSRF_HEADER] = token;
+  //   }
+  // }
 
   if (authHandlers) {
     const { accessToken } = authHandlers.getTokens();

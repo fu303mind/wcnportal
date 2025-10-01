@@ -7,5 +7,5 @@ export const getDashboardController = async (req: Request, res: Response) => {
     return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Unauthorized' });
   }
   const data = await getDashboardData(req.user.id);
-  res.status(StatusCodes.OK).json(data);
+  return res.status(StatusCodes.OK).json(data);
 };

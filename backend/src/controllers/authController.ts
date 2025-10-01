@@ -33,7 +33,7 @@ const setAuthCookies = (res: Response, accessToken: string, refreshToken: string
 
 export const register = async (req: Request, res: Response) => {
   const user = await registerUser(req.body);
-  res.status(StatusCodes.CREATED).json({ user });
+  return res.status(StatusCodes.CREATED).json({ user });
 };
 
 export const login = async (req: Request, res: Response) => {
@@ -49,7 +49,7 @@ export const login = async (req: Request, res: Response) => {
   }
 
   setAuthCookies(res, result.accessToken, result.refreshToken);
-  res.status(StatusCodes.OK).json({
+  return res.status(StatusCodes.OK).json({
     token: result.accessToken,
     refreshToken: result.refreshToken,
     user: result.user
@@ -64,7 +64,7 @@ export const refresh = async (req: Request, res: Response) => {
 
   const { accessToken, refreshToken: newRefreshToken } = await refreshTokens(refreshToken);
   setAuthCookies(res, accessToken, newRefreshToken);
-  res.status(StatusCodes.OK).json({ token: accessToken, refreshToken: newRefreshToken });
+  return res.status(StatusCodes.OK).json({ token: accessToken, refreshToken: newRefreshToken });
 };
 
 export const logout = async (req: Request, res: Response) => {
@@ -74,7 +74,7 @@ export const logout = async (req: Request, res: Response) => {
   }
   res.clearCookie('accessToken');
   res.clearCookie('refreshToken');
-  res.status(StatusCodes.NO_CONTENT).send();
+  return res.status(StatusCodes.NO_CONTENT).send();
 };
 
 export const resendVerification = async (req: Request, res: Response) => {
@@ -92,25 +92,25 @@ export const resendVerification = async (req: Request, res: Response) => {
   }
 
   await sendEmailVerification(userDoc);
-  res.status(StatusCodes.NO_CONTENT).send();
+  return res.status(StatusCodes.NO_CONTENT).send();
 };
 
 export const verifyEmailAddress = async (req: Request, res: Response) => {
   const { token } = req.body;
   const user = await verifyEmail(token);
-  res.status(StatusCodes.OK).json({ user });
+  return res.status(StatusCodes.OK).json({ user });
 };
 
 export const requestPasswordReset = async (req: Request, res: Response) => {
   const { email } = req.body;
   await initiatePasswordReset(email);
-  res.status(StatusCodes.NO_CONTENT).send();
+  return res.status(StatusCodes.NO_CONTENT).send();
 };
 
 export const completePasswordReset = async (req: Request, res: Response) => {
   const { token, password } = req.body;
   const user = await resetPassword(token, password);
-  res.status(StatusCodes.OK).json({ user });
+  return res.status(StatusCodes.OK).json({ user });
 };
 
 export const startMfaSetup = async (req: Request, res: Response) => {
@@ -118,7 +118,7 @@ export const startMfaSetup = async (req: Request, res: Response) => {
     return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Unauthorized' });
   }
   const data = await initiateMfaSetup(req.user.id);
-  res.status(StatusCodes.OK).json(data);
+  return res.status(StatusCodes.OK).json(data);
 };
 
 export const confirmMfaSetup = async (req: Request, res: Response) => {
@@ -127,7 +127,7 @@ export const confirmMfaSetup = async (req: Request, res: Response) => {
   }
   const { token } = req.body;
   const user = await verifyMfaSetup(req.user.id, token);
-  res.status(StatusCodes.OK).json({ user });
+  return res.status(StatusCodes.OK).json({ user });
 };
 
 export const removeMfa = async (req: Request, res: Response) => {
@@ -136,5 +136,5 @@ export const removeMfa = async (req: Request, res: Response) => {
   }
   const { password } = req.body;
   await disableMfa(req.user.id, password);
-  res.status(StatusCodes.NO_CONTENT).send();
+  return res.status(StatusCodes.NO_CONTENT).send();
 };

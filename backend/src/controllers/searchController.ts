@@ -13,5 +13,5 @@ export const searchController = async (req: Request, res: Response) => {
   }
 
   const results = await searchAll(req.user.id, query);
-  res.status(StatusCodes.OK).json(results);
+  return res.status(StatusCodes.OK).json(results);
 };

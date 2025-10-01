@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import fs from 'fs';
-import path from 'path';
 import { deleteDocument, getDocument, listDocuments, storeDocument } from '@/services/documentService';
 
 export const uploadDocumentController = async (req: Request, res: Response) => {
@@ -21,7 +20,7 @@ export const uploadDocumentController = async (req: Request, res: Response) => {
     clientAccountId: req.body.clientAccountId
   });
 
-  res.status(StatusCodes.CREATED).json({ document });
+  return res.status(StatusCodes.CREATED).json({ document });
 };
 
 export const listDocumentsController = async (req: Request, res: Response) => {
@@ -34,7 +33,7 @@ export const listDocumentsController = async (req: Request, res: Response) => {
     clientAccountId: req.query.clientAccountId as string | undefined
   });
 
-  res.status(StatusCodes.OK).json({ documents });
+  return res.status(StatusCodes.OK).json({ documents });
 };
 
 export const downloadDocumentController = async (req: Request, res: Response) => {
@@ -46,7 +45,7 @@ export const downloadDocumentController = async (req: Request, res: Response) =>
   const fileStream = fs.createReadStream(absolutePath);
   res.setHeader('Content-Type', document.mimeType);
   res.setHeader('Content-Disposition', `attachment; filename="${document.originalName}"`);
-  fileStream.pipe(res);
+  return fileStream.pipe(res);
 };
 
 export const deleteDocumentController = async (req: Request, res: Response) => {
@@ -55,5 +54,5 @@ export const deleteDocumentController = async (req: Request, res: Response) => {
   }
 
   await deleteDocument(req.params.id, req.user.id);
-  res.status(StatusCodes.NO_CONTENT).send();
+  return res.status(StatusCodes.NO_CONTENT).send();
 };

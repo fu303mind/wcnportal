@@ -1,6 +1,6 @@
-import rateLimit from 'express-rate-limit';
+import rateLimit, { Options } from 'express-rate-limit';
 
-export const createRateLimiter = (options?: Partial<rateLimit.Options>) =>
+export const createRateLimiter = (options?: Partial<Options>) =>
   rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100,

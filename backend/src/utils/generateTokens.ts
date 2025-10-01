@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions } from 'jsonwebtoken';
 import env from '@/config/env';
 
 interface TokenPayload {
@@ -8,14 +8,18 @@ interface TokenPayload {
   mfaVerified?: boolean;
 }
 
-export const generateAccessToken = (payload: TokenPayload) =>
-  jwt.sign(payload, env.JWT_ACCESS_SECRET, { expiresIn: env.JWT_ACCESS_EXPIRATION });
+export const generateAccessToken = (payload: TokenPayload): string => {
+  return jwt.sign(payload, env.JWT_ACCESS_SECRET, { expiresIn: env.JWT_ACCESS_EXPIRATION } as SignOptions);
+};
 
-export const generateRefreshToken = (payload: Pick<TokenPayload, 'sub'>) =>
-  jwt.sign(payload, env.JWT_REFRESH_SECRET, { expiresIn: env.JWT_REFRESH_EXPIRATION });
+export const generateRefreshToken = (payload: Pick<TokenPayload, 'sub'>): string => {
+  return jwt.sign(payload, env.JWT_REFRESH_SECRET, { expiresIn: env.JWT_REFRESH_EXPIRATION } as SignOptions);
+};
 
-export const verifyAccessToken = (token: string) =>
-  jwt.verify(token, env.JWT_ACCESS_SECRET) as TokenPayload;
+export const verifyAccessToken = (token: string): TokenPayload => {
+  return jwt.verify(token, env.JWT_ACCESS_SECRET) as TokenPayload;
+};
 
-export const verifyRefreshToken = (token: string) =>
-  jwt.verify(token, env.JWT_REFRESH_SECRET) as Pick<TokenPayload, 'sub'>;
+export const verifyRefreshToken = (token: string): Pick<TokenPayload, 'sub'> => {
+  return jwt.verify(token, env.JWT_REFRESH_SECRET) as Pick<TokenPayload, 'sub'>;
+};
